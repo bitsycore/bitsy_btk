@@ -3,7 +3,7 @@ import bpy
 from ..utilities import get_all_objects, show_message_box
 
 
-class BITSYTK_OT_rename_data_by_object_name(bpy.types.Operator):
+class BTK_OT_rename_data_by_object_name(bpy.types.Operator):
     """Rename all objects data with the name of the Object holding it (if it has only one)"""
 
     bl_idname = "bitsy_btk.rename_data_by_object_name"
@@ -15,19 +15,13 @@ class BITSYTK_OT_rename_data_by_object_name(bpy.types.Operator):
         return context.mode == "OBJECT"
 
     def execute(self, context):
-        _rename_data_by_object_name(get_all_objects())
+        counter = 0
+
+        for obj in get_all_objects():
+            if obj.data and obj.data.users == 1 and obj.data.name != obj.name:
+                obj.data.name = obj.name
+                counter += 1
+
+        show_message_box(f"Renamed {counter} object data", title="Result")
+
         return {"FINISHED"}
-
-
-#################################################################################
-# Functions
-#################################################################################
-def _rename_data_by_object_name(objects):
-    counter = 0
-
-    for obj in objects:
-        if obj.data and obj.data.users == 1 and obj.data.name != obj.name:
-            obj.data.name = obj.name
-            counter += 1
-
-    show_message_box(f"Renamed {counter} object data", title="Result")

@@ -1,7 +1,7 @@
 import bpy
 
 
-class BITSYTK_OT_center_nodetree(bpy.types.Operator):
+class BTK_OT_center_nodetree(bpy.types.Operator):
     bl_idname = "bitsy_btk.center_nodes"
     bl_label = "Center Node Tree"
     bl_options = {"REGISTER", "UNDO"}

@@ -3,10 +3,7 @@ import bpy
 from ..utilities import show_message_box
 
 
-#################################################################################
-# Operator
-#################################################################################
-class BITSYTK_OT_rename_images_extension(bpy.types.Operator):
+class BTK_OT_rename_images_extension(bpy.types.Operator):
     """Rename images extension"""
 
     bl_idname = "bitsy_btk.rename_images_extension"
@@ -30,23 +27,16 @@ class BITSYTK_OT_rename_images_extension(bpy.types.Operator):
         return context.mode == "OBJECT"
 
     def execute(self, context):
-        _rename_images_extension(self.extension, self.new_extension, bpy.data.images)
+        counter = 0
+        for image in bpy.data.images:
+            if self.extension not in image.filepath:
+                continue
+            image.filepath = image.filepath.replace(self.extension, self.new_extension)
+            counter += 1
+            image.reload()
+        show_message_box(f"Renamed {counter} images", title="Result")
         return {"FINISHED"}
 
     def invoke(self, context, event):
         wm = context.window_manager
         return wm.invoke_props_dialog(self)
-
-
-#################################################################################
-# Functions
-#################################################################################
-def _rename_images_extension(old_extension, new_extension, images):
-    counter = 0
-    for image in images:
-        if old_extension not in image.filepath:
-            continue
-        image.filepath = image.filepath.replace(old_extension, new_extension)
-        counter += 1
-        image.reload()
-    show_message_box(f"Renamed {counter} images", title="Result")
