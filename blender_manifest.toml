@@ -1,0 +1,28 @@
+schema_version = "1.0.0"
+
+# Add-on information
+id = "bitsy_btk"
+name = "Bitsy Blender Toolkit"
+tagline = "Utilities for Blender"
+type = "add-on"
+version = "1.0.0"
+blender_version_min = "4.2.0"
+tags = ["3D View", "Node", "Object", "User Interface"]
+
+# Social
+website = "https://github.com/bitsycore/bitsy_btk"
+maintainer = "Bitsy"
+
+# License information
+license = ["SPDX:GPL-3.0-or-later"]
+copyright = ["2025 Bitsy"]
+
+[build]
+paths_exclude_pattern = [
+  "__pycache__/",
+  "/.git/",
+  ".gitignore",
+  "/.idea/",
+  "/.venv/",
+  "/.vscode/",
+]

@@ -9,7 +9,7 @@ from .btk import node_graph
 
 bl_info = {
     "name": "Bitsy Blender Toolkit",
-    "description": "Diverse tools for blender",
+    "description": "Utilities for Blender",
     "author": "Bitsy",
     "version": (1, 0, 0),
     "blender": (4, 2, 0),
