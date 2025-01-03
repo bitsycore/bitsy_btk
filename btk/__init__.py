@@ -2,39 +2,39 @@ import bpy
 
 from .preferences import BTK_AddonPreferences
 
-from . import editor_quick, switch_view, asset_browser, object_quick, node_graph
+from . import editor_tools, view_switcher, asset_browser, object_tools, node_graph_tools
 from .. import __name__ as addon_name
 
 
 def register():
     bpy.utils.register_class(BTK_AddonPreferences)
 
-    preferences: BTK_AddonPreferences = bpy.context.preferences.addons[addon_name].preferences
+    pref: BTK_AddonPreferences = bpy.context.preferences.addons[addon_name].preferences
 
-    if preferences.enable_editor_tools:
-        editor_quick.register()
-    if preferences.enable_view_switcher:
-        switch_view.register()
-    if preferences.enable_assets_browser:
+    if pref.enable_editor_tools:
+        editor_tools.register()
+    if pref.enable_view_switcher:
+        view_switcher.register()
+    if pref.enable_assets_browser:
         asset_browser.register()
-    if preferences.enable_object:
-        object_quick.register()
-    if preferences.enable_node:
-        node_graph.register()
+    if pref.enable_object_tools:
+        object_tools.register()
+    if pref.enable_node_graph_tools:
+        node_graph_tools.register()
 
 
 def unregister():
-    preferences: BTK_AddonPreferences = bpy.context.preferences.addons[addon_name].preferences
+    pref: BTK_AddonPreferences = bpy.context.preferences.addons[addon_name].preferences
 
-    if preferences.enable_node:
-        node_graph.unregister()
-    if preferences.enable_object:
-        object_quick.unregister()
-    if preferences.enable_assets_browser:
+    if pref.enable_node_graph_tools:
+        node_graph_tools.unregister()
+    if pref.enable_object_tools:
+        object_tools.unregister()
+    if pref.enable_assets_browser:
         asset_browser.unregister()
-    if preferences.enable_view_switcher:
-        switch_view.unregister()
-    if preferences.enable_editor_tools:
-        editor_quick.unregister()
+    if pref.enable_view_switcher:
+        view_switcher.unregister()
+    if pref.enable_editor_tools:
+        editor_tools.unregister()
 
     bpy.utils.unregister_class(BTK_AddonPreferences)
