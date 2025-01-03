@@ -22,7 +22,10 @@ class BTK_OT_clean_unused_material_slot(bpy.types.Operator):
 
             if ob.visible_get():
                 with bpy.context.temp_override(active_object=ob):
-                    bpy.ops.object.material_slot_remove_unused()
+                    try:
+                        bpy.ops.object.material_slot_remove_unused()
+                    except RuntimeError:
+                        pass
 
         show_message_box("Removed unused material slot", title="Result")
         return {"FINISHED"}
