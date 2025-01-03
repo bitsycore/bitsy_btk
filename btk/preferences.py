@@ -7,8 +7,8 @@ from .. import __name__ as addon_name
 class BTK_AddonPreferences(bpy.types.AddonPreferences):
     bl_idname = addon_name
 
-    @classmethod
-    def toggle_register(cls, enabled: bool, module):
+    @staticmethod
+    def toggle_register(enabled: bool, module):
         _ = module.register() if enabled else module.unregister()
 
     enable_view_switcher: bpy.props.BoolProperty(
