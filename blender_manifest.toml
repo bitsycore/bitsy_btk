@@ -23,6 +23,7 @@ paths_exclude_pattern = [
   "/.git/",
   ".gitignore",
   "/.idea/",
+  "/.github/",
   "/.venv/",
   "/.vscode/",
 ]
