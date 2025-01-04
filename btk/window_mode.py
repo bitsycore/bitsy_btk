@@ -11,5 +11,3 @@ class WindowMode(Enum):
     RENDER = 0
     PREF = 1
     NEW = 2
-
-    

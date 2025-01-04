@@ -7,25 +7,27 @@ class BTK_AddonPreferences(bpy.types.AddonPreferences):
     bl_idname = addon_name
 
     @staticmethod
-    def on_toggle_register(enabled, mdoule_name):
+    def on_toggle(enabled, mdoule_name):
         pass
 
     asset_browser_window_mode: bpy.props.EnumProperty(
         name="",
         description="Select the window mode",
-        items=[(
-            WindowMode.RENDER.name,
-            WindowMode.RENDER.name,
-            "Use Render Window (Custom Size)"
-        ), (
-            WindowMode.PREF.name,
-            WindowMode.PREF.name,
-            "Use Preference Window (Always on Top)"
-        ), (
-            WindowMode.NEW.name,
-            WindowMode.NEW.name,
-            "Basic new window"
-        )],
+        items=[
+            (
+                WindowMode.RENDER.name,
+                WindowMode.RENDER.name,
+                "Use Render Window (Custom Size)"
+            ), (
+                WindowMode.PREF.name,
+                WindowMode.PREF.name,
+                "Use Preference Window (Always on Top)"
+            ), (
+                WindowMode.NEW.name,
+                WindowMode.NEW.name,
+                "Basic new window"
+            )
+        ],
         default=WindowMode.PREF.name
     )
 
@@ -41,40 +43,48 @@ class BTK_AddonPreferences(bpy.types.AddonPreferences):
         default=600
     )
 
+    #####################################
+    # MARK: Module Enable
+    #####################################
+
     enable_view_switcher: bpy.props.BoolProperty(
         name="Enable View Switcher",
         default=True,
-        update=lambda self, _: BTK_AddonPreferences.on_toggle_register(
+        update=lambda self, _: BTK_AddonPreferences.on_toggle(
             self, "view_switcher")
     )
 
     enable_editor_tools: bpy.props.BoolProperty(
         name="Enable Editor Tools",
         default=True,
-        update=lambda self, _: BTK_AddonPreferences.on_toggle_register(
+        update=lambda self, _: BTK_AddonPreferences.on_toggle(
             self, "editor_tools")
     )
 
     enable_object_tools: bpy.props.BoolProperty(
         name="Enable Object Tools",
         default=True,
-        update=lambda self, _: BTK_AddonPreferences.on_toggle_register(
+        update=lambda self, _: BTK_AddonPreferences.on_toggle(
             self, "object_tools")
     )
 
     enable_node_graph_tools: bpy.props.BoolProperty(
         name="Enable Node Graph Tools",
         default=True,
-        update=lambda self, _: BTK_AddonPreferences.on_toggle_register(
+        update=lambda self, _: BTK_AddonPreferences.on_toggle(
             self, "node_graph_tools")
     )
 
     enable_assets_browser: bpy.props.BoolProperty(
         name="Enable Asset Browser Shortcut",
         default=True,
-        update=lambda self, _: BTK_AddonPreferences.on_toggle_register(
+        update=lambda self, _: BTK_AddonPreferences.on_toggle(
             self, "assets_browser")
     )
+
+    #####################################
+    # MARK: Draw
+    #####################################
 
     def draw(self, context):
         layout = self.layout
@@ -92,6 +102,11 @@ class BTK_AddonPreferences(bpy.types.AddonPreferences):
         layout.prop(self, "enable_object_tools")
         layout.prop(self, "enable_node_graph_tools")
         layout.prop(self, "enable_assets_browser")
+
+
+#####################################
+# MARK: Pref Access
+#####################################
 
 
 def get_addon_prefs() -> BTK_AddonPreferences:

@@ -11,7 +11,7 @@ modules = {
 }
 
 
-def toggle_register(enabled: bool, module_name: str):
+def update_module_registration(enabled: bool, module_name: str):
     module = modules.get(module_name)
     if module:
         (module.register if enabled else module.unregister)()
@@ -21,11 +21,12 @@ def register():
     bpy.utils.register_class(BTK_AddonPreferences)
     pref = get_addon_prefs()
 
+    # Register Modules
     for name, module in modules.items():
         if getattr(pref, f"enable_{name}", False):
             module.register()
 
-    pref.on_toggle_register = toggle_register
+    pref.on_toggle = update_module_registration
 
 
 def unregister():
