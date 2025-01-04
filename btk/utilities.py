@@ -1,5 +1,16 @@
 from enum import Enum
 import bpy
+from .. import __name__ as addon_name
+
+
+############################################
+# MARK: General
+############################################
+
+
+def get_addon_name() -> str:
+    return addon_name
+
 
 ############################################
 # MARK: Materials

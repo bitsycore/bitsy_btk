@@ -1,15 +1,12 @@
 import bpy
-
-from .preferences import BTK_AddonPreferences
-
+from .preferences import BTK_AddonPreferences, get_addon_prefs
 from . import editor_tools, view_switcher, asset_browser, object_tools, node_graph_tools
-from .. import __name__ as addon_name
 
 
 def register():
     bpy.utils.register_class(BTK_AddonPreferences)
 
-    pref: BTK_AddonPreferences = bpy.context.preferences.addons[addon_name].preferences
+    pref = get_addon_prefs()
 
     if pref.enable_editor_tools:
         editor_tools.register()
@@ -24,7 +21,7 @@ def register():
 
 
 def unregister():
-    pref: BTK_AddonPreferences = bpy.context.preferences.addons[addon_name].preferences
+    pref = get_addon_prefs()
 
     if pref.enable_node_graph_tools:
         node_graph_tools.unregister()

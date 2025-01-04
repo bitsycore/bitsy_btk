@@ -1,11 +1,10 @@
 import bpy
-
+from .utilities import get_addon_name
 from . import asset_browser, editor_tools, node_graph_tools, object_tools, view_switcher
-from .. import __name__ as addon_name
 
 
 class BTK_AddonPreferences(bpy.types.AddonPreferences):
-    bl_idname = addon_name
+    bl_idname = get_addon_name()
 
     @staticmethod
     def toggle_register(enabled: bool, module):
@@ -39,3 +38,7 @@ class BTK_AddonPreferences(bpy.types.AddonPreferences):
         layout.prop(self, "enable_object_tools")
         layout.prop(self, "enable_node_graph_tools")
         layout.prop(self, "enable_assets_browser")
+
+
+def get_addon_prefs() -> BTK_AddonPreferences:
+    return bpy.context.preferences.addons[get_addon_name()].preferences
