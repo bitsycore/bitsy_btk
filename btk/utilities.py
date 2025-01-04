@@ -1,5 +1,5 @@
+from enum import Enum
 import bpy
-
 
 ############################################
 # MARK: Materials
@@ -7,36 +7,15 @@ import bpy
 
 
 def get_all_materials() -> set[bpy.types.Material]:
-    mats: set[bpy.types.Material] = set()
-
-    mat: bpy.types.Material
-    for mat in bpy.data.materials:
-        if mat.name != "Dots Stroke":
-            mats.add(mat)
-
-    return mats
+    return {mat for mat in bpy.data.materials.values() if mat.name != "Dots Stroke"}
 
 
 def get_all_materials_in_selected_objects() -> set[bpy.types.Material]:
-    mats: set[bpy.types.Material] = set()
-
-    obj: bpy.types.Object
-    for obj in get_selected_objects():
-        slot: bpy.types.MaterialSlot
-        for slot in obj.material_slots:
-            mats.add(slot.material)
-
-    return mats
+    return {slot.material for object in get_selected_objects() for slot in object.material_slots}
 
 
 def get_all_materials_in_active_object() -> set[bpy.types.Material]:
-    mats: set[bpy.types.Material] = set()
-
-    slot: bpy.types.MaterialSlot
-    for slot in bpy.context.active_object.material_slots:
-        mats.add(slot.material)
-
-    return mats
+    return {slot.material for slot in get_active_object().material_slots}
 
 
 ############################################
@@ -56,22 +35,31 @@ def get_active_object() -> bpy.types.Object:
     return bpy.context.active_object
 
 
-def show_message_box(message="", title="Info", icon="INFO"):
-    bpy.context.window_manager.popup_menu(lambda self, a: self.layout.label(text=message), title=title, icon=icon)
-
-    print("[" + title + "] : " + message)
-
-
 ############################################
-# MARK: Assets Browser
+# MARK: Windows
 ############################################
 
 
-def open_asset_browser_window():
-    mode = 1
+class WindowMode(Enum):
+    """
+    RENDER  : Use Render Window (Don't have Always On Top but is sizable)\n
+    PREF    : Use Preference Window (Have Always On Top but is not sizable)
+    NEW     : Open a new window (Can't do much more)
+    """
 
-    # Use Render Window (Don't have Always On Top but is sizable)
-    if mode == 1:
+    RENDER = 1
+    PREF = 2
+    NEW = 3
+
+
+def open_window(area_type: str, window_mode: WindowMode, width=1280, height=480):
+    if window_mode == WindowMode.PREF:
+        bpy.ops.screen.userpref_show("INVOKE_DEFAULT")
+        bpy.context.window.screen = bpy.context.window_manager.windows[-1].screen
+        bpy.ops.screen.area_dupli()
+        bpy.context.window.screen.areas[0].ui_type = area_type
+
+    elif window_mode == WindowMode.RENDER:
         render = bpy.context.scene.render
         prefs = bpy.context.preferences
 
@@ -82,15 +70,14 @@ def open_asset_browser_window():
         old_y = render.resolution_y
         old_percentage = render.resolution_percentage
 
-        render.resolution_x = 1280
-        render.resolution_y = 480
+        render.resolution_x = width
+        render.resolution_y = height
         render.resolution_percentage = 100
         prefs.view.render_display_type = "WINDOW"
 
         bpy.ops.render.view_show("INVOKE_DEFAULT")
-
         area = bpy.context.window_manager.windows[-1].screen.areas[0]
-        area.ui_type = "ASSETS"
+        area.ui_type = area_type
 
         # Restore Old Values
         render.resolution_x = old_x
@@ -99,9 +86,25 @@ def open_asset_browser_window():
         prefs.view.render_display_type = old_display_type
         prefs.is_dirty = old_dirty
 
-    # Use Pref Window (Have Always On Top but is not sizable)
-    elif mode == 2:
-        bpy.ops.screen.userpref_show("INVOKE_DEFAULT")
-        bpy.context.window.screen = bpy.context.window_manager.windows[-1].screen
-        bpy.ops.screen.area_dupli()
-        bpy.context.window.screen.areas[0].ui_type = "ASSETS"
+    elif window_mode == WindowMode.NEW:
+        bpy.ops.wm.window_new("INVOKE_DEFAULT")
+        bpy.context.window_manager.windows[-1].screen.areas[0].ui_type = area_type
+
+
+############################################
+# MARK: Assets Browser
+############################################
+
+
+def open_assets_browser_window(mode=WindowMode.PREF):
+    open_window("ASSETS", mode)
+
+
+############################################
+# MARK: Others
+############################################
+
+
+def show_message_box(message="", title="Info", icon="INFO"):
+    bpy.context.window_manager.popup_menu(lambda self, a: self.layout.label(text=message), title=title, icon=icon)
+    print("[" + title + "] : " + message)

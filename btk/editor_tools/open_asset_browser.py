@@ -1,6 +1,6 @@
 import bpy
 
-from ..utilities import open_asset_browser_window
+from ..utilities import open_assets_browser_window
 
 
 class BTK_OT_open_asset_browser(bpy.types.Operator):
@@ -15,5 +15,5 @@ class BTK_OT_open_asset_browser(bpy.types.Operator):
         return context.mode == "OBJECT"
 
     def execute(self, context):
-        open_asset_browser_window()
+        open_assets_browser_window()
         return {"FINISHED"}
