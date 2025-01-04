@@ -17,17 +17,34 @@ classes = (
 )
 
 
+registered = False
+
+
 def register():
+    global registered
+    if registered:
+        return
+
     for c in classes:
         bpy.utils.register_class(c)
 
     bpy.types.VIEW3D_MT_object.append(BTK_MT_view3d_object.menu_draw)
-    bpy.types.VIEW3D_MT_object_context_menu.append(BTK_MT_view3d_object.menu_draw)
+    bpy.types.VIEW3D_MT_object_context_menu.append(
+        BTK_MT_view3d_object.menu_draw)
+
+    registered = True
 
 
 def unregister():
-    bpy.types.VIEW3D_MT_object_context_menu.remove(BTK_MT_view3d_object.menu_draw)
+    global registered
+    if not registered:
+        return
+
+    bpy.types.VIEW3D_MT_object_context_menu.remove(
+        BTK_MT_view3d_object.menu_draw)
     bpy.types.VIEW3D_MT_object.remove(BTK_MT_view3d_object.menu_draw)
 
     for c in reversed(classes):
         bpy.utils.unregister_class(c)
+
+    registered = False
