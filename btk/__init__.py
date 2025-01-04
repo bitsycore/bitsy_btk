@@ -2,36 +2,37 @@ import bpy
 from .preferences import BTK_AddonPreferences, get_addon_prefs
 from . import editor_tools, view_switcher, asset_browser, object_tools, node_graph_tools
 
+modules = {
+    "editor_tools": editor_tools,
+    "view_switcher": view_switcher,
+    "asset_browser": asset_browser,
+    "object_tools": object_tools,
+    "node_graph_tools": node_graph_tools,
+}
+
+
+def toggle_register(enabled: bool, module_name: str):
+    module = modules.get(module_name)
+    if module:
+        (module.register if enabled else module.unregister)()
+
 
 def register():
     bpy.utils.register_class(BTK_AddonPreferences)
-
     pref = get_addon_prefs()
 
-    if pref.enable_editor_tools:
-        editor_tools.register()
-    if pref.enable_view_switcher:
-        view_switcher.register()
-    if pref.enable_assets_browser:
-        asset_browser.register()
-    if pref.enable_object_tools:
-        object_tools.register()
-    if pref.enable_node_graph_tools:
-        node_graph_tools.register()
+    for name, module in modules.items():
+        if getattr(pref, f"enable_{name}", False):
+            module.register()
+
+    pref.on_toggle_register = toggle_register
 
 
 def unregister():
     pref = get_addon_prefs()
 
-    if pref.enable_node_graph_tools:
-        node_graph_tools.unregister()
-    if pref.enable_object_tools:
-        object_tools.unregister()
-    if pref.enable_assets_browser:
-        asset_browser.unregister()
-    if pref.enable_view_switcher:
-        view_switcher.unregister()
-    if pref.enable_editor_tools:
-        editor_tools.unregister()
+    for name, module in modules.items():
+        if getattr(pref, f"enable_{name}", False):
+            module.unregister()
 
     bpy.utils.unregister_class(BTK_AddonPreferences)

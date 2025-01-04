@@ -1,15 +1,7 @@
-from enum import Enum
 import bpy
+
+from .window_mode import WindowMode
 from .. import __name__ as addon_name
-
-
-############################################
-# MARK: General
-############################################
-
-
-def get_addon_name() -> str:
-    return addon_name
 
 
 ############################################
@@ -49,18 +41,6 @@ def get_active_object() -> bpy.types.Object:
 ############################################
 # MARK: Windows
 ############################################
-
-
-class WindowMode(Enum):
-    """
-    RENDER  : Use Render Window (Don't have Always On Top but is sizable)\n
-    PREF    : Use Preference Window (Have Always On Top but is not sizable)
-    NEW     : Open a new window (Can't do much more)
-    """
-
-    RENDER = 1
-    PREF = 2
-    NEW = 3
 
 
 def open_window(area_type: str, window_mode: WindowMode, width=1280, height=480):
@@ -103,19 +83,11 @@ def open_window(area_type: str, window_mode: WindowMode, width=1280, height=480)
 
 
 ############################################
-# MARK: Assets Browser
-############################################
-
-
-def open_assets_browser_window(mode=WindowMode.PREF):
-    open_window("ASSETS", mode)
-
-
-############################################
 # MARK: Others
 ############################################
 
 
 def show_message_box(message="", title="Info", icon="INFO"):
-    bpy.context.window_manager.popup_menu(lambda self, a: self.layout.label(text=message), title=title, icon=icon)
+    bpy.context.window_manager.popup_menu(
+        lambda self, a: self.layout.label(text=message), title=title, icon=icon)
     print("[" + title + "] : " + message)

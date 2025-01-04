@@ -1,5 +1,4 @@
 import bpy
-
 from ..utilities import get_all_materials, show_message_box
 
 

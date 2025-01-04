@@ -1,6 +1,6 @@
 import bpy
-
-from ..utilities import open_assets_browser_window
+from ..utilities import open_window
+from ..preferences import get_current_asset_browser_window_mode, get_current_asset_browser_window_size
 
 
 class BTK_OT_open_asset_browser(bpy.types.Operator):
@@ -15,5 +15,7 @@ class BTK_OT_open_asset_browser(bpy.types.Operator):
         return context.mode == "OBJECT"
 
     def execute(self, context):
-        open_assets_browser_window()
+        x, y = get_current_asset_browser_window_size()
+        mode = get_current_asset_browser_window_mode()
+        open_window("ASSETS", mode, x, y)
         return {"FINISHED"}
