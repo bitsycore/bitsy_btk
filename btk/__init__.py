@@ -11,7 +11,7 @@ modules = [
 ]
 
 imported_modules = {
-    module: importlib.import_module(f".{module}", package=__name__) for module in modules
+    module: importlib.import_module(f".{module}", package=__package__) for module in modules
 }
 
 

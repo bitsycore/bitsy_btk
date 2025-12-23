@@ -1,6 +1,6 @@
 import bpy
 from .window_mode import WindowMode
-from .. import __name__ as addon_name
+from .. import __package__ as addon_name
 
 
 class BTK_AddonPreferences(bpy.types.AddonPreferences):

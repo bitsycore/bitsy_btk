@@ -2,7 +2,7 @@ schema_version = "1.0.0"
 
 # Add-on information
 id = "bitsy_btk"
-name = "Bitsy Blender Toolkit"
+name = "Bitsy ToolKit"
 tagline = "Utilities for Blender"
 type = "add-on"
 version = "1.0.1"

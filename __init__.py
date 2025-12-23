@@ -2,7 +2,7 @@ from . import btk
 
 
 bl_info = {
-    "name": "Bitsy Blender Toolkit",
+    "name": "Bitsy Toolkit",
     "description": "Utilities for Blender",
     "author": "Bitsy",
     "version": (1, 0, 1),

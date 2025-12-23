@@ -1,7 +1,6 @@
 import bpy
 
 from .window_mode import WindowMode
-from .. import __name__ as addon_name
 
 
 ############################################
@@ -10,7 +9,7 @@ from .. import __name__ as addon_name
 
 
 def get_all_materials() -> set[bpy.types.Material]:
-    return {mat for mat in bpy.data.materials.values() if mat.name != "Dots Stroke"}
+    return {mat for mat in bpy.data.materials.values() if mat != "Dots Stroke"}
 
 
 def get_all_materials_in_selected_objects() -> set[bpy.types.Material]:
@@ -54,28 +53,31 @@ def open_window(area_type: str, window_mode: WindowMode, width=1280, height=480)
         render = bpy.context.scene.render
         prefs = bpy.context.preferences
 
-        # Save Old Values
-        old_dirty = prefs.is_dirty
-        old_display_type = prefs.view.render_display_type
-        old_x = render.resolution_x
-        old_y = render.resolution_y
-        old_percentage = render.resolution_percentage
+        save_old_values = (
+            prefs.is_dirty,
+            prefs.view.render_display_type,
+            render.resolution_x,
+            render.resolution_y,
+            render.resolution_percentage
+        )
 
+        # Custom Values
         render.resolution_x = width
         render.resolution_y = height
         render.resolution_percentage = 100
         prefs.view.render_display_type = "WINDOW"
 
+        # Open Window and Set Area Type
         bpy.ops.render.view_show("INVOKE_DEFAULT")
         area = bpy.context.window_manager.windows[-1].screen.areas[0]
         area.ui_type = area_type
 
         # Restore Old Values
-        render.resolution_x = old_x
-        render.resolution_y = old_y
-        render.resolution_percentage = old_percentage
-        prefs.view.render_display_type = old_display_type
-        prefs.is_dirty = old_dirty
+        prefs.is_dirty = save_old_values[0]
+        prefs.view.render_display_type = save_old_values[1]
+        render.resolution_x = save_old_values[2]
+        render.resolution_y = save_old_values[3]
+        render.resolution_percentage = save_old_values[4]
 
     elif window_mode == WindowMode.NEW:
         bpy.ops.wm.window_new("INVOKE_DEFAULT")
